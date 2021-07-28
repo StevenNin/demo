@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        p span{
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+       
+    </div>
+
+    <script type="text/html" id="=tpl">
+        <!-- <h2>{{title}}</h2>
+        <p><span>{{author}}</span> <span>{{createtime}}</span></p>
+        <hr>
+        <p>{{content}}</p> -->
+    </script>
+
+    
+  <script src="lib/jquery.js"></script>
+  <script src="lib/template-web.js"></script>
+  <script src="lib/moment.js"></script>
+  <script>
+      const id = location.search.split('=')[1]
+      // console.log(id)
+    $.ajax({
+      type: 'get',
+      url: '/api/blog/detail',
+      data:{
+          id
+      },
+      success(info) {
+        
+        $('#box').html(
+          `
+          <h2>${info.data.title}</h2>
+        <p><span>${info.data.author}</span> <span>${moment(info.data.createtime).format('YYYY-MM-DD')}</span></p>
+        <hr>
+        <p>${info.data.content}</p>
+          `
+        )
+      }
+    })
+  </script>
+</html>

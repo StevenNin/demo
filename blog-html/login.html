@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    用户名：<input type="text" name="username" value="zhangsan" /> 密码：<input
+      type="password"
+      name="password"
+      value="123"
+    />
+    <input type="button" value="登录" />
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/template-web.js"></script>
+    <script>
+      let data = JSON.stringify({
+        username: $('[name=username]').val(),
+        password: $('[name=password]').val()
+      })
+      $('[type=button]').click(function() {
+        $.ajax({
+          type: 'post',
+          url: '/api/user/login',
+          data: data,
+          contentType: 'application/json',
+          success(info) {
+            console.log(info)
+            location.href = 'admin.html'
+          }
+        })
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      input {
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>编辑博客</h1>
+    <hr />
+    <input type="text" name="title" id="title" /><br />
+    <textarea name="content" cols="30" rows="10" id="content"></textarea><br />
+    <input type="button" value="修改" id="edit" />
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/template-web.js"></script>
+    <script src="lib/moment.js"></script>
+    <script>
+      const id = location.search.split('=')[1]
+
+      $.ajax({
+        type: 'get',
+        url: `/api/blog/detail?id=${id}`,
+        success(info) {
+          console.log(info)
+          $('#title').val(info.data.title)
+          $('#content').val(info.data.content)
+        }
+      })
+
+      $('#edit').on('click', function() {
+        $.ajax({
+          type: 'post',
+          url: `/api/blog/update?id=${id}`,
+          data: JSON.stringify({
+            title: $('#title').val(),
+            content: $('#content').val()
+          }),
+          contentType: 'application/json',
+          success(info) {
+            // console.log(info)
+            location.href = 'admin.html'
+          }
+        })
+      })
+    </script>
+  </body>
+</html>

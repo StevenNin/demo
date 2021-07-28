@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        text-decoration: none;
+      }
+      table {
+        border-spacing: 0;
+        width: 500px;
+        margin-top: 10px;
+      }
+      td,
+      th {
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>管理中心</h1>
+    <hr />
+    <a href="new.html">新建博客</a><br />
+
+    <input type="text" name="" id="keyword" />
+    <input type="button" value="搜索" id="search" />
+    <table>
+      <thead>
+        <tr>
+          <th>博客标题</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script type="text/html" id="tpl">
+      {{each data v i}}
+        <tr>
+            <td><a href="detail.html?id={{v.id}}">{{v.title}} -- {{v.author}}</a></td>
+            <td><a href="edit.html?id={{v.id}}">修改</a> <a data-id='{{v.id}}' id='del'>删除</a></td>
+          </tr>
+      {{/each}}
+    </script>
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/template-web.js"></script>
+    <script src="lib/moment.js"></script>
+    <script>
+      let url = '/api/blog/list?isadmin=1'
+
+      const render = function() {
+        $.ajax({
+          type: 'get',
+          url: url,
+          success(info) {
+            $('tbody').html(template('tpl', info))
+          }
+        })
+      }
+      render()
+
+      $('#search').click(function() {
+        const keyword = $('#keyword').val()
+        url = `/api/blog/list?isadmin=1&keyword=${keyword}`
+        // console.log(url)
+        render()
+      })
+
+      $('tbody').on('click', '#del', function() {
+        const id = $(this).data('id')
+        $.ajax({
+          type: 'post',
+          url: `/api/blog/del?id=${id}`,
+          success(info) {
+            // console.log(info)
+            history.go(0)
+          }
+        })
+      })
+    </script>
+  </body>
+</html>

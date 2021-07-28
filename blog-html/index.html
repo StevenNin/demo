@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        /* margin: 0;
+        padding: 0; */
+        list-style: none;
+        text-decoration: none;
+      }
+      p {
+        color: #999;
+      }
+      p a {
+        color: #999;
+      }
+      li {
+        border-bottom: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>博客首页</h1>
+    <ul></ul>
+  </body>
+
+  <script type="text/html" id="tpl">
+    {{each data v i}}
+        <li>
+            <h2><a href="detail.html?id={{v.id}}">{{v.title}}</a></h2>
+            <p><a href='index.html?author={{v.author}}'>{{v.author}}</a> <span>{{v.date}}</span></p>
+        </li>
+    {{/each}}
+  </script>
+
+  <script src="lib/jquery.js"></script>
+  <script src="lib/template-web.js"></script>
+  <script src="lib/moment.js"></script>
+  <script>
+    let url = '/api/blog/list'
+    let author = location.search.split('=')[1]
+    console.log(author)
+    if (author) {
+      url += `?author=${author}`
+    }
+    $.ajax({
+      type: 'get',
+      url: url,
+      success(info) {
+        info.data.forEach(item => {
+          item.date = moment(item.createtime).format('YYYY-MM-DD')
+        })
+        $('ul').html(template('tpl', info))
+      }
+    })
+  </script>
+</html>

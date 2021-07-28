@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      input {
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>创建博客</h1>
+    <hr />
+    <input type="text" name="title" id="title" /><br />
+    <textarea
+      name="content"
+      cols="30"
+      rows="10"
+      name="content"
+      id="content"
+    ></textarea
+    ><br />
+    <input type="button" value="创建" />
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/template-web.js"></script>
+    <script src="lib/moment.js"></script>
+    <script>
+      $('[type=button]').click(function() {
+        $.ajax({
+          type: 'post',
+          url: '/api/blog/new',
+          data: JSON.stringify({
+            title: $('#title').val(),
+            content: $('#content').val()
+          }),
+          contentType: 'application/json',
+          success(info) {
+            location.href = 'admin.html'
+            // console.log(info)
+          }
+        })
+      })
+    </script>
+  </body>
+</html>
